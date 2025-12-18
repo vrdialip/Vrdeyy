@@ -1,53 +1,96 @@
 import React from "react";
-import "./home.css";
 import { motion } from "framer-motion";
+import Lanyard from "./Lanyard/Lanyard";
 
-
-
-export default function Hero() {
+export default function Home() {
   return (
-    <motion.section
-        id="home"
-        className="homepage"
-        initial={{ opacity: 0, y: 50 }}          // posisi awal: transparan + agak turun
-        animate={{ opacity: 1, y: 0 }}           // saat pertama kali render
-        transition={{ duration: 1, ease: "easeOut" }} // durasi & easing animasi
-        >
-      <div className="hero">
-        {/* Bagian teks */}
-        <div className="text-side slide-up">
-          <h1 className="title">
-            Hi, I'm <span>Verdi</span>
-          </h1>
-          <h2 className="subtitle">
-            Junior Frontend Developer , Passionate about UI /UX
-          </h2>
-          <p className="desc">
-            "This website was built with AI assistance while learning React and
-            Vite, combining hands-on practice with smart guidance on components,
-            styling, and modern animations."
-          </p>
-          <div className="cta fade-in-delay">
-            <a href="#project" className="btn">
-              🚀 View Projects
+    <div className="container relative min-h-[calc(100vh-80px)] flex items-center pt-20 md:pt-0">
+      <div className="flex flex-col md:flex-row items-center gap-12 w-full">
+
+        {/* TEXT SECTION */}
+        <div className="flex-1 space-y-8 md:space-y-10 relative z-0 md:-translate-y-40">
+
+          {/* SOFT GLOW */}
+          <div className="absolute -top-32 -left-32 w-80 h-80 bg-[var(--color-accent)]/10 blur-[100px] rounded-full pointer-events-none" />
+
+          {/* EYEBROW */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex items-center gap-3"
+          >
+            <div className="h-px w-6 md:w-8 bg-[var(--color-accent)]/50" />
+            <p className="uppercase tracking-[0.3em] text-[10px] md:text-xs text-[var(--color-accent)] font-medium">
+              Frontend • UI • Motion
+            </p>
+          </motion.div>
+
+          {/* HEADLINE */}
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-5xl md:text-7xl font-bold leading-[0.95] tracking-tight"
+          >
+            Hi, I'm
+            <br />
+            <span className="relative inline-block mt-2">
+              <span className="gradient-text">Verdi</span>
+              <span className="absolute left-0 -bottom-1 w-full h-[6px] bg-[var(--color-accent)]/30 blur-xl px-4" />
+            </span>
+          </motion.h1>
+
+          {/* COPY */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-gray-400 text-base md:text-lg max-w-md leading-relaxed font-light"
+          >
+            <span className="text-white font-normal text-lg">Front-end developer </span>
+            crafting immersive digital experiences through precision, motion, and code.
+          </motion.p>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex items-center gap-6 pt-4"
+          >
+            {/* PRIMARY CTA */}
+            <a
+              href="#projects"
+              className="group relative px-6 py-3 md:px-7 md:py-3.5 rounded-full text-sm md:text-base font-semibold
+                bg-[var(--color-accent)] text-white
+                shadow-[0_0_20px_rgba(var(--color-accent-rgb),0.2)]
+                hover:shadow-[0_0_35px_rgba(var(--color-accent-rgb),0.4)]
+                hover:scale-105 transition-all duration-300 overflow-hidden"
+            >
+              <span className="relative z-10">Launch Project</span>
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             </a>
-            <a href="#contact" className="btn-outline">
-              📩 Contact Me
+
+            {/* SECONDARY CTA */}
+            <a
+              href="#contact"
+              className="group relative text-gray-400 hover:text-white text-sm md:text-base font-medium transition-colors flex items-center gap-2"
+            >
+              <span>Get in touch</span>
+              <span className="w-6 h-px bg-gray-600 group-hover:w-10 group-hover:bg-[var(--color-accent)] transition-all duration-300" />
             </a>
+          </motion.div>
+        </div>
+
+        {/* LANYARD CONTAINER */}
+        <div className="absolute md:relative top-[-120px] md:top-[-60px] right-[-25%] md:right-0 w-[130%] md:w-auto md:flex-1 h-[600px] md:h-[800px] z-20 pointer-events-none md:pointer-events-auto">
+          <div className="w-full h-full md:-translate-y-40 lg:translate-x-10 scale-85 md:scale-100 origin-top-right translate-x-20 md:translate-x-0">
+            <Lanyard position={[0, 0, 18]} gravity={[0, -120, 0]} />
           </div>
         </div>
 
-        {/* Bagian foto */}
-        <div className="image-side scale-in">
-          <div className="decor-shape shape1"></div>
-          <div className="decor-shape shape2"></div>
-          <img
-            src="./karikatur-verdi.png"
-            alt="Verdi"
-            className="profile-img"
-          />
-        </div>
       </div>
-    </motion.section>
+    </div>
   );
 }
