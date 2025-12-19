@@ -50,13 +50,15 @@ const LightPillar = ({
         const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
         cameraRef.current = camera;
 
+        const isMobile = window.innerWidth < 1024;
+
         let renderer;
         try {
             renderer = new THREE.WebGLRenderer({
                 antialias: false,
                 alpha: true,
                 powerPreference: 'high-performance',
-                precision: 'lowp',
+                precision: isMobile ? 'lowp' : 'mediump',
                 stencil: false,
                 depth: false
             });
@@ -67,7 +69,7 @@ const LightPillar = ({
         }
 
         renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.2 : 2));
         container.appendChild(renderer.domElement);
         rendererRef.current = renderer;
 
@@ -99,6 +101,7 @@ const LightPillar = ({
       uniform float uPillarHeight;
       uniform float uNoiseIntensity;
       uniform float uPillarRotation;
+      uniform bool isMobile;
       varying vec2 vUv;
 
       const float PI = 3.141592653589793;
@@ -125,7 +128,9 @@ const LightPillar = ({
         float amplitude = 1.0;
         vec3 deformed = pos;
         
+        float iterations = isMobile ? 2.0 : 4.0;
         for(float i = 0.0; i < 4.0; i++) {
+          if (i >= iterations) break;
           deformed.xz *= rot(0.4);
           float phase = timeOffset * i * 2.0;
           vec3 oscillation = cos(deformed.zxy * frequency - phase);
@@ -168,7 +173,9 @@ const LightPillar = ({
 
         vec3 color = vec3(0.0);
         
+        float maxIterations = isMobile ? 50.0 : 100.0;
         for(float i = 0.0; i < 100.0; i++) {
+          if (i >= maxIterations) break;
           vec3 pos = origin + direction * depth;
           pos.xz *= rotX;
 
@@ -220,7 +227,8 @@ const LightPillar = ({
                 uPillarWidth: { value: pillarWidth },
                 uPillarHeight: { value: pillarHeight },
                 uNoiseIntensity: { value: noiseIntensity },
-                uPillarRotation: { value: pillarRotation }
+                uPillarRotation: { value: pillarRotation },
+                isMobile: { value: isMobile }
             },
             transparent: true,
             depthWrite: false,

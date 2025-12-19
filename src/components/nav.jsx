@@ -12,8 +12,14 @@ const navItems = [
 
 function DockIcon({ mouseX, item, isActive, onClick }) {
   const ref = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 1024);
+  }, []);
 
   const distance = useTransform(mouseX, (val) => {
+    if (isMobile) return 0;
     const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
     return val - bounds.x - bounds.width / 2;
   });
@@ -28,7 +34,7 @@ function DockIcon({ mouseX, item, isActive, onClick }) {
   return (
     <motion.div
       ref={ref}
-      style={{ width }}
+      style={{ width: isMobile ? 40 : width }}
       onClick={onClick}
       className={`aspect-square rounded-full border backdrop-blur-md flex items-center justify-center relative group cursor-pointer transition-all
         ${isActive
@@ -45,17 +51,17 @@ function DockIcon({ mouseX, item, isActive, onClick }) {
         />
       </div>
 
-      {/* Tooltip */}
-      <span
-        className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1
-        bg-[var(--color-bg-card)]/90 border border-white/10
-        rounded text-xs text-white opacity-0 group-hover:opacity-100
-        transition-opacity pointer-events-none whitespace-nowrap"
-      >
-        {item.label}
-      </span>
+      {!isMobile && (
+        <span
+          className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1
+          bg-[var(--color-bg-card)]/90 border border-white/10
+          rounded text-xs text-white opacity-0 group-hover:opacity-100
+          transition-opacity pointer-events-none whitespace-nowrap"
+        >
+          {item.label}
+        </span>
+      )}
 
-      {/* Active Dot */}
       {isActive && (
         <motion.div
           layoutId="activeDot"
@@ -71,23 +77,29 @@ const Nav = () => {
   const [activeTab, setActiveTab] = useState("home");
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-
-      for (const item of navItems) {
-        const section = document.querySelector(item.href);
-        if (
-          section &&
-          section.offsetTop <= scrollPosition &&
-          section.offsetTop + section.offsetHeight > scrollPosition
-        ) {
-          setActiveTab(item.id);
-        }
-      }
+    const observerOptions = {
+      root: null,
+      rootMargin: '-40% 0% -40% 0%',
+      threshold: 0
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          setActiveTab(id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    navItems.forEach((item) => {
+      const section = document.querySelector(item.href);
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   return (

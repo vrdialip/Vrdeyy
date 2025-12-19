@@ -15,10 +15,10 @@ import * as THREE from 'three';
 extend({ MeshLineGeometry, MeshLineMaterial });
 
 export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], fov = 20, transparent = true }) {
-    const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
+    const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        const handleResize = () => setIsMobile(window.innerWidth < 1024);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -27,8 +27,12 @@ export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], 
         <div className="relative z-0 w-full h-full flex justify-start items-start transform scale-100 origin-top-right">
             <Canvas
                 camera={{ position: position, fov: fov }}
-                dpr={[1, isMobile ? 1.5 : 2]}
-                gl={{ alpha: transparent }}
+                dpr={[1, isMobile ? 1.2 : 2]}
+                gl={{
+                    alpha: transparent,
+                    antialias: !isMobile,
+                    powerPreference: 'high-performance'
+                }}
                 onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
             >
                 <ambientLight intensity={Math.PI} />
@@ -50,20 +54,24 @@ export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], 
                         rotation={[0, 0, Math.PI / 3]}
                         scale={[100, 0.1, 1]}
                     />
-                    <Lightformer
-                        intensity={3}
-                        color="white"
-                        position={[1, 1, 1]}
-                        rotation={[0, 0, Math.PI / 3]}
-                        scale={[100, 0.1, 1]}
-                    />
-                    <Lightformer
-                        intensity={10}
-                        color="white"
-                        position={[-10, 0, 14]}
-                        rotation={[0, Math.PI / 2, Math.PI / 3]}
-                        scale={[100, 10, 1]}
-                    />
+                    {!isMobile && (
+                        <>
+                            <Lightformer
+                                intensity={3}
+                                color="white"
+                                position={[1, 1, 1]}
+                                rotation={[0, 0, Math.PI / 3]}
+                                scale={[100, 0.1, 1]}
+                            />
+                            <Lightformer
+                                intensity={10}
+                                color="white"
+                                position={[-10, 0, 14]}
+                                rotation={[0, Math.PI / 2, Math.PI / 3]}
+                                scale={[100, 10, 1]}
+                            />
+                        </>
+                    )}
                 </Environment>
             </Canvas>
         </div>
@@ -80,7 +88,14 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
         ang = new THREE.Vector3(),
         rot = new THREE.Vector3(),
         dir = new THREE.Vector3();
-    const segmentProps = { type: 'dynamic', canSleep: true, colliders: false, angularDamping: 4, linearDamping: 4 };
+    const segmentProps = {
+        type: 'dynamic',
+        canSleep: true,
+        colliders: false,
+        angularDamping: 4,
+        linearDamping: 4,
+        allowSleep: true
+    };
     const { nodes, materials } = useGLTF(cardGLB);
     const texture = useTexture(lanyard);
     const [curve] = useState(
@@ -126,7 +141,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
             curve.points[1].copy(j2.current.lerped);
             curve.points[2].copy(j1.current.lerped);
             curve.points[3].copy(fixed.current.translation());
-            band.current.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32));
+            band.current.geometry.setPoints(curve.getPoints(isMobile ? 12 : 32));
             ang.copy(card.current.angvel());
             rot.copy(card.current.rotation());
             card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
@@ -165,7 +180,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
                         <mesh geometry={nodes.card.geometry}>
                             <meshPhysicalMaterial
                                 map={materials.base.map}
-                                map-anisotropy={16}
+                                map-anisotropy={isMobile ? 4 : 16}
                                 clearcoat={isMobile ? 0 : 1}
                                 clearcoatRoughness={0.15}
                                 roughness={0.9}
@@ -182,7 +197,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
                 <meshLineMaterial
                     color="white"
                     depthTest={false}
-                    resolution={isMobile ? [1000, 2000] : [1000, 1000]}
+                    resolution={isMobile ? [500, 1000] : [1000, 1000]}
                     useMap
                     map={texture}
                     repeat={[-4, 1]}
