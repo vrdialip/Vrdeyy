@@ -49,7 +49,7 @@ export default function Home() {
             className="text-gray-400 text-base md:text-lg max-w-md leading-relaxed font-light"
           >
             <span className="text-white font-normal text-lg">Front-end developer </span>
-            crafting immersive digital experiences through precision, motion, and code.
+            designing and building immersive digital experiences through precision, motion, and code.
           </motion.p>
 
           {/* CTA */}

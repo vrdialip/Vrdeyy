@@ -7,6 +7,8 @@ import Projects from "./components/project";
 import Contact from "./components/contact";
 import LightPillar from './components/LigthPillar/LightPillar';
 import Highlight from "./components/HighLight";
+import Lenis from 'lenis';
+import { useEffect } from "react";
 
 // Footer Component
 const Footer = () => (
@@ -27,6 +29,44 @@ const Footer = () => (
 );
 
 export default function App() {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      touchMultiplier: 2,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    // Global click handler for anchor links
+    const handleAnchorClick = (e) => {
+      const target = e.target.closest('a');
+      if (target && target.hash && target.origin === window.location.origin) {
+        e.preventDefault();
+        const element = document.querySelector(target.hash);
+        if (element) {
+          lenis.scrollTo(element, {
+            offset: -20,
+            duration: 1.5,
+          });
+        }
+      }
+    };
+
+    document.addEventListener('click', handleAnchorClick);
+
+    return () => {
+      lenis.destroy();
+      document.removeEventListener('click', handleAnchorClick);
+    };
+  }, []);
+
   return (
     <div className="relative overflow-x-hidden" style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}>
 

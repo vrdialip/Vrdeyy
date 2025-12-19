@@ -7,31 +7,31 @@ const skillCategories = [
   {
     title: "Frontend Development",
     icon: Layout,
-    skills: ["React.js", "Vue.js", "Tailwind CSS", "Framer Motion", "HTML5 & CSS3", "JavaScript (ES6+)"],
+    skills: ["React.js", "Tailwind CSS", "HTML5 & CSS3", "JavaScript (ES6+)"],
     description: "Building responsive, interactive, and accessible user interfaces."
   },
   {
     title: "Backend Development",
     icon: Server,
-    skills: ["Node.js", "Express", "PHP", "Laravel", "REST APIs"],
+    skills: ["Node.js", "Express", "PHP", "REST APIs"],
     description: "Creating robust server-side applications and efficient APIs."
   },
   {
     title: "Database Management",
     icon: Database,
-    skills: ["MySQL", "MongoDB", "PostgreSQL"],
+    skills: ["MySQL", "MongoDB"],
     description: "Designing schemas and managing data persistence."
   },
   {
     title: "Tools & DevOps",
     icon: Wrench,
-    skills: ["Git & GitHub", "Vite", "VS Code", "Postman", "Linux Basics"],
+    skills: ["Git & GitHub", "Vite", "VS Code"],
     description: "Streamlining development workflows and deployment."
   },
   {
     title: "UI/UX Design",
     icon: Smartphone,
-    skills: ["Figma", "Wireframing", "Prototyping", "User Flow", "Mobile First Design"],
+    skills: ["Figma", "Prototyping", "User Flow", "Mobile First Design"],
     description: "Crafting intuitive and aesthetically pleasing digital experiences."
   },
   {

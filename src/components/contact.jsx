@@ -15,8 +15,8 @@ const contactMethods = [
     id: "instagram",
     icon: Instagram,
     label: "Instagram",
-    value: "@vrdiialipp",
-    link: "https://instagram.com/vrdiialipp",
+    value: "@vr.deyy",
+    link: "https://www.instagram.com/vr.deyy?igsh=bDBteXFycXNtbjZ4",
     color: "bg-pink-500/10 text-pink-500"
   },
   {
@@ -31,8 +31,8 @@ const contactMethods = [
     id: "email",
     icon: Mail,
     label: "Email",
-    value: "hello@verdi.dev", // Placeholder, adjust if needed
-    link: "mailto:hello@verdi.dev",
+    value: "vrdialif385@gmail.com", // Placeholder, adjust if needed
+    link: "mailto:vrdialif385@gmail.com",
     color: "bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
   }
 ];
@@ -102,7 +102,7 @@ const Contact = () => {
         </div>
 
         <a
-          href="mailto:hello@verdi.dev"
+          href="mailto:vrdialif385@gmail.com"
           className="relative z-10 px-10 py-4 bg-white text-black font-bold rounded-full hover:scale-105 active:scale-95 transition-all shadow-[0_10px_20px_-5px_rgba(255,255,255,0.3)]"
         >
           Work with me

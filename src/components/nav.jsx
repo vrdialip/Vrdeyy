@@ -90,20 +90,6 @@ const Nav = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (e, href) => {
-    e.preventDefault();
-    const element = document.querySelector(href);
-    if (!element) return;
-
-    const yOffset = -20;
-    const y =
-      element.getBoundingClientRect().top +
-      window.pageYOffset +
-      yOffset;
-
-    window.scrollTo({ top: y, behavior: "smooth" });
-  };
-
   return (
     <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-end gap-4 pb-3">
       <motion.div
@@ -115,13 +101,13 @@ const Nav = () => {
           px-4 pb-3 backdrop-blur-md"
       >
         {navItems.map((item) => (
-          <DockIcon
-            key={item.id}
-            mouseX={mouseX}
-            item={item}
-            isActive={activeTab === item.id}
-            onClick={(e) => scrollToSection(e, item.href)}
-          />
+          <a key={item.id} href={item.href}>
+            <DockIcon
+              mouseX={mouseX}
+              item={item}
+              isActive={activeTab === item.id}
+            />
+          </a>
         ))}
       </motion.div>
     </div>

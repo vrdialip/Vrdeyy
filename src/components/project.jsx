@@ -23,10 +23,10 @@ const projects = [
   },
   {
     id: "mission_03",
-    title: "Portfolio Ops",
-    category: "Web Ops",
-    desc: "A responsive tactical interface built with React and Vite to showcase clean design and usability parameters.",
-    tech: ["React", "Vite"],
+    title: "Portfolio Website",
+    category: "Web Development",
+    desc: "A responsive portfolio website built with React and React Bits libraries, focusing on clean UI, smooth interactions, and modern web usability.",
+    tech: ["React", "React Bits"],
     img: "./porto.png",
     link: "#"
   },
@@ -84,8 +84,8 @@ export default function Projects() {
               key={cat}
               onClick={() => setFilter(cat)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === cat
-                  ? "bg-[var(--color-accent)] text-white"
-                  : "bg-[var(--color-bg-card)] text-gray-400 hover:text-white"
+                ? "bg-[var(--color-accent)] text-white"
+                : "bg-[var(--color-bg-card)] text-gray-400 hover:text-white"
                 }`}
             >
               {cat}
